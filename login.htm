@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log-in!</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Georgia, "Times New Roman", serif;
+      background-color: #d8f8b7;
+      background-image: radial-gradient(#ffffff 18%, transparent 19%),
+                        radial-gradient(#ffffff 18%, transparent 19%);
+      background-size: 90px 90px;
+      background-position: 0 0, 45px 45px;
+      padding: 40px 16px;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      background-color: #e6fbd0;
+      border: 2.5px dashed #1b5e20;
+      border-radius: 28px;
+      padding: 50px 36px 68px;
+      box-shadow: 0 10px 25px rgba(46, 125, 50, 0.1);
+    }
+
+    /* Top Bow (Links back to index.htm) */
+    .bow-link {
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 84px;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    .bow-link:hover {
+      transform: translateX(-50%) scale(1.08);
+    }
+
+    .form-title {
+      text-align: center;
+      color: #0d5c16;
+      font-size: 2.1rem;
+      font-weight: bold;
+      margin-bottom: 34px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .input-row label {
+      color: #0d5c16;
+      font-size: 1.75rem;
+      min-width: 82px;
+    }
+
+    .input-pill {
+      flex: 1;
+      background-color: #b7eb9e;
+      border-radius: 14px;
+      padding: 14px 20px 12px;
+      box-shadow: 0 6px 14px rgba(85, 139, 47, 0.22);
+    }
+
+    .input-pill input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #e6fbd0;
+      outline: none;
+      color: #0d5c16;
+      font-family: inherit;
+      font-size: 1.35rem;
+      padding: 4px 2px;
+    }
+
+    /* Status Message */
+    .status-msg {
+      text-align: center;
+      font-family: 'Patrick Hand', cursive, sans-serif;
+      font-size: 1.2rem;
+      min-height: 26px;
+      margin-top: -8px;
+      color: #b71c1c;
+    }
+
+    .status-msg.success {
+      color: #0d5c16;
+    }
+
+    /* Bottom Left Text */
+    .cat-prompt {
+      position: absolute;
+      bottom: -36px;
+      left: 12px;
+      font-family: 'Patrick Hand', cursive, sans-serif;
+      color: #1b3b1e;
+      font-size: 1.1rem;
+      user-select: none;
+    }
+
+    /* Bottom Center Clickable Cat */
+    .cat-submit-btn {
+      position: absolute;
+      bottom: -58px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 98px;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .cat-submit-btn:hover {
+      transform: translateX(-50%) scale(1.12) rotate(-3deg);
+    }
+
+    .cat-submit-btn:active {
+      transform: translateX(-50%) scale(0.95);
+    }
+
+    /* Logged-in Welcome View */
+    .hidden {
+      display: none;
+    }
+
+    .welcome-screen {
+      text-align: center;
+      color: #0d5c16;
+      padding: 10px 0;
+    }
+
+    .welcome-screen h2 {
+      font-size: 1.9rem;
+      margin-bottom: 12px;
+    }
+
+    .welcome-screen p {
+      font-size: 1.2rem;
+      margin-bottom: 26px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background-color: #b7eb9e;
+      color: #0d5c16;
+      font-family: inherit;
+      font-size: 1.3rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(85, 139, 47, 0.22);
+    }
+
+    .btn:hover {
+      background-color: #a8e38c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <!-- Top Bow (Click to return to index.htm) -->
+    <a href="index.htm" class="bow-link" title="Back to start">
+      <svg viewBox="0 0 120 80" fill="none" xmlns="http://w3.org">
+        <path d="M52 44 L36 74 L48 68 L56 76 L60 46 Z" fill="#b7eb9e" stroke="#0d5c16" stroke-width="3.5" stroke-linejoin="round"/>
+        <path d="M68 44 L84 74 L72 68 L64 76 L60 46 Z" fill="#b7eb9e" stroke="#0d5c16" stroke-width="3.5" stroke-linejoin="round"/>
+        <path d="M54 36 C32 10, 14 14, 18 36 C14 56, 32 60, 54 42 Z" fill="#b7eb9e" stroke="#0d5c16" stroke-width="3.5" stroke-linejoin="round"/>
+        <path d="M48 37 C36 28, 28 30, 26 36 C28 42, 36 44, 48 39" stroke="#0d5c16" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M66 36 C88 10, 106 14, 102 36 C106 56, 88 60, 66 42 Z" fill="#b7eb9e" stroke="#0d5c16" stroke-width="3.5" stroke-linejoin="round"/>
+        <path d="M72 37 C84 28, 92 30, 94 36 C92 42, 84 44, 72 39" stroke="#0d5c16" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="51" y="29" width="18" height="20" rx="8" fill="#b7eb9e" stroke="#0d5c16" stroke-width="3.5"/>
+      </svg>
+    </a>
+
+    <!-- Log-in Form -->
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <h1 class="form-title">Log-in!</h1>
+
+      <div class="input-row">
+        <label for="user">User:</label>
+        <div class="input-pill">
+          <input type="text" id="user" autocomplete="username" required>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <label for="pin">Pin:</label>
+        <div class="input-pill">
+          <input type="password" id="pin" maxlength="4" inputmode="numeric" autocomplete="current-password" required>
+        </div>
+      </div>
+
+      <div id="status" class="status-msg"></div>
+
+      <span class="cat-prompt">Press the cat when done.</span>
+
+      <button type="submit" class="cat-submit-btn" title="Press the cat when done">
+        <svg viewBox="0 0 120 110" fill="none" xmlns="http://w3.org">
+          <path d="M44 74 L38 104 L49 104 L52 92 L68 92 L71 104 L82 104 L76 74 Z" fill="#ffffff" stroke="#3b332b" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M30 42 L26 12 L48 26 C55 24, 65 24, 72 26 L94 12 L90 42 C96 52, 94 74, 60 76 C26 74, 24 52, 30 42 Z" fill="#ffffff" stroke="#3b332b" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M26 50 L12 47 M26 57 L12 58 M94 50 L108 47 M94 57 L108 58" stroke="#3b332b" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="45" cy="50" r="11" fill="#ffffff" stroke="#3b332b" stroke-width="3.5"/>
+          <circle cx="45" cy="50" r="6" fill="#3b332b"/>
+          <circle cx="43" cy="48" r="2.2" fill="#ffffff"/>
+          <circle cx="75" cy="50" r="11" fill="#ffffff" stroke="#3b332b" stroke-width="3.5"/>
+          <circle cx="75" cy="50" r="6" fill="#3b332b"/>
+          <circle cx="73" cy="48" r="2.2" fill="#ffffff"/>
+          <path d="M55 62 Q57.5 66 60 62 Q62.5 66 65 62" stroke="#3b332b" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </button>
+    </form>
+
+    <!-- Shown after successful login -->
+    <div id="welcome-screen" class="welcome-screen hidden">
+      <h2 id="welcome-user">Welcome!</h2>
+      <p>You have successfully logged in.</p>
+      <a href="wall.htm" class="btn">Visit Wall</a>
+    </div>
+  </div>
+
+  <script>
+    // Ensure at least one demo account (@cat / 1234) exists for testing
+    const storedUsers = JSON.parse(localStorage.getItem('pastel_users') || '{}');
+    if (Object.keys(storedUsers).length === 0) {
+      storedUsers['@cat'] = '1234';
+      localStorage.setItem('pastel_users', JSON.stringify(storedUsers));
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('user').value.trim();
+      const pin = document.getElementById('pin').value.trim();
+      const status = document.getElementById('status');
+      status.classList.remove('success');
+
+      if (!/^\d{4}$/.test(pin)) {
+        status.textContent = 'Pin must be 4 numbers!';
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('pastel_users') || '{}');
+
+      if (!users[user]) {
+        status.textContent = 'User not found! (Try @cat with pin 1234)';
+        return;
+      }
+
+      if (users[user] !== pin) {
+        status.textContent = 'Wrong pin!';
+        return;
+      }
+
+      // Save current logged-in session and show welcome view
+      localStorage.setItem('pastel_current_user', user);
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('welcome-user').textContent = `Welcome, ${user}!`;
+      document.getElementById('welcome-screen').classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>

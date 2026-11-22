@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Wall - Welcome!</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  <style>
+    :root {
+      --bg-outer: #d7f8c9;
+      --bg-card: #e5fad8;
+      --bg-bow: #a9e59e;
+      --border-green: #1d4e28;
+      --text-main: #1b4324;
+      --text-muted: #3c6946;
+      --accent-blue: #3b82f6;
+      --accent-pink: #f472b6;
+      --accent-yellow: #eab308;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Fredoka', sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-outer);
+      background-image: radial-gradient(#ffffff 18%, transparent 19%);
+      background-size: 90px 90px;
+      background-position: 0 0, 45px 45px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .layout-container {
+      display: grid;
+      grid-template-columns: 240px minmax(360px, 560px) 240px;
+      gap: 24px;
+      align-items: start;
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    .dashed-box {
+      background-color: var(--bg-card);
+      border: 2.5px dashed var(--border-green);
+      border-radius: 26px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 10px rgba(29, 78, 40, 0.06);
+    }
+
+    .left-sidebar {
+      margin-top: 160px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .dot-yellow { border: 2px solid var(--accent-yellow); background: #fef08a; }
+    .dot-pink   { border: 2px solid var(--accent-pink); background: #fbcfe8; }
+    .dot-blue   { border: 2px solid var(--accent-blue); background: #bfdbfe; }
+
+    .subject-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+    }
+
+    .see-posts-btn {
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .see-posts-btn:hover {
+      color: #0d2b14;
+      font-weight: 600;
+    }
+
+    .dots-more {
+      text-align: center;
+      letter-spacing: 4px;
+      font-weight: bold;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+
+    .main-feed {
+      background-color: var(--bg-card);
+      border: 3px dashed var(--border-green);
+      border-radius: 34px;
+      padding: 24px 32px 40px;
+      min-height: 92vh;
+    }
+
+    .feed-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .feed-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--border-green);
+      margin-bottom: 6px;
+    }
+
+    .ribbon-bow {
+      width: 95px;
+      height: 60px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .composer-box {
+      border: 2px dashed var(--border-green);
+      border-radius: 20px;
+      padding: 14px;
+      margin-bottom: 24px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .composer-top {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .username-input {
+      border: 1.5px dashed var(--border-green);
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 5px 10px;
+      font-family: 'Fredoka', sans-serif;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      width: 150px;
+    }
+
+    .composer-textarea {
+      width: 100%;
+      border: 1.5px dashed var(--border-green);
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      resize: none;
+      outline: none;
+    }
+
+    .composer-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .composer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .btn-dashed {
+      background-color: var(--bg-bow);
+      border: 2px dashed var(--border-green);
+      border-radius: 14px;
+      padding: 6px 14px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--border-green);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .btn-dashed:hover {
+      transform: scale(1.03);
+      background-color: #96dc89;
+    }
+
+    .btn-attach {
+      background: transparent;
+    }
+
+    .active-filter-bar {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      background: #c7f2b4;
+      border: 1.5px dashed var(--border-green);
+      border-radius: 12px;
+      padding: 6px 12px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+    }
+
+    .post-item {
+      margin-bottom: 24px;
+    }
+
+    .username {
+      font-weight: 600;
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+    }
+
+    .post-text {
+      font-size: 0.96rem;
+      line-height: 1.4;
+      padding-left: 10px;
+      margin-bottom: 10px;
+    }
+
+    .highlight-blue {
+      color: #2563eb;
+      font-weight: 500;
+    }
+
+    .doc-attachment {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 6px 0 8px 24px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--border-green);
+    }
+
+    .doc-circle {
+      width: 62px;
+      height: 62px;
+      border: 2.5px dashed var(--border-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-card);
+      transition: background 0.15s;
+    }
+
+    .doc-attachment:hover .doc-circle {
+      background-color: var(--bg-bow);
+    }
+
+    .doc-label {
+      font-size: 0.72rem;
+      margin-top: 3px;
+      color: var(--text-muted);
+    }
+
+    .post-footer {
+      padding-left: 10px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .action-link {
+      background: none;
+      border: none;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .action-link:hover {
+      color: var(--border-green);
+      text-decoration: underline;
+    }
+
+    .replies-container {
+      border: 2px dashed var(--border-green);
+      border-radius: 22px;
+      padding: 12px 18px;
+      margin: 10px 0 10px 26px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .reply-item {
+      margin-bottom: 10px;
+    }
+
+    .reply-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .nested-reply {
+      margin-left: 24px;
+      padding-left: 12px;
+      border-left: 2px dashed var(--border-green);
+      margin-top: 8px;
+    }
+
+    .comment-reply-btn {
+      font-size: 0.75rem;
+      margin-left: 10px;
+      margin-top: 2px;
+    }
+
+    .nested-reply-form {
+      display: none;
+      margin: 6px 0 6px 10px;
+      gap: 6px;
+    }
+
+    .nested-reply-form.open {
+      display: flex;
+    }
+
+    .reply-form {
+      display: none;
+      margin: 10px 0 0 26px;
+      gap: 8px;
+    }
+
+    .reply-form.open {
+      display: flex;
+    }
+
+    .reply-input {
+      flex: 1;
+      border: 1.5px dashed var(--border-green);
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .right-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .sidebar-title-lg {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-list-item {
+      font-size: 0.88rem;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 960px) {
+      .layout-container {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+      }
+      .left-sidebar, .right-sidebar {
+        margin-top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="layout-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="left-sidebar">
+      <div class="dashed-box">
+        <div class="sidebar-header">
+          <span class="dot dot-yellow"></span>
+          <span>Subjects You Might Need</span>
+        </div>
+        <div class="subject-row">
+          <span>G9 Math</span>
+          <button type="button" class="see-posts-btn" onclick="filterBySubject('Math')">See posts</button>
+        </div>
+        <div class="subject-row">
+          <span>G9 Science</span>
+          <button type="button" class="see-posts-btn" onclick="filterBySubject('Science')">See posts</button>
+        </div>
+        <div class="dots-more" onclick="filterBySubject('All')" title="Show all posts">•••</div>
+      </div>
+    </aside>
+
+    <!-- CENTER SOCIAL WALL -->
+    <main class="main-feed">
+      <header class="feed-header">
+        <h1>Welcome!</h1>
+        <!-- Cute Ribbon Bow -->
+        <svg class="ribbon-bow" viewBox="0 0 120 75" fill="none" xmlns="http://w3.org">
+          <path d="M52 40 L30 66 L44 61 L50 70 L58 44 Z" fill="#a9e59e" stroke="#1d4e28" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M68 40 L90 66 L76 61 L70 70 L62 44 Z" fill="#a9e59e" stroke="#1d4e28" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M55 32 C34 8, 10 15, 15 36 C19 54, 42 47, 55 36 Z" fill="#a9e59e" stroke="#1d4e28" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M65 32 C86 8, 110 15, 105 36 C101 54, 78 47, 65 36 Z" fill="#a9e59e" stroke="#1d4e28" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="51" y="26" width="18" height="18" rx="6" fill="#a9e59e" stroke="#1d4e28" stroke-width="2.5"/>
+        </svg>
+      </header>
+
+      <!-- Functional "What's on your mind?" Text Box -->
+      <section class="composer-box">
+        <div class="composer-top">
+          <input type="text" id="postUsername" class="username-input" value="@student_you" placeholder="@username" />
+          <select id="postSubject" class="username-input" style="width: 120px;">
+            <option value="General">General</option>
+            <option value="Math">G9 Math</option>
+            <option value="Science">G9 Science</option>
+          </select>
+        </div>
+        <textarea id="postContent" class="composer-textarea" rows="2" placeholder="What's on your mind?"></textarea>
+        <div class="composer-actions">
+          <button type="button" class="btn-dashed btn-attach" id="attachToggleBtn" onclick="toggleAttachment()">
+            + Attach Reviewer Note
+          </button>
+          <button type="button" class="btn-dashed" onclick="createPost()">Post to Wall</button>
+        </div>
+      </section>
+
+      <div id="filterBanner" class="active-filter-bar">
+        <span id="filterText">Showing: G9 Math</span>
+        <button type="button" class="see-posts-btn" onclick="filterBySubject('All')">Clear filter</button>
+      </div>
+
+      <div id="feedContainer"></div>
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right-sidebar">
+      <div class="dashed-box">
+        <div class="sidebar-title-lg">
+          <span class="dot dot-pink"></span>
+          <span>Inbox</span>
+        </div>
+        <div class="sidebar-list-item">@crabbypatty - 2 messages</div>
+        <div class="sidebar-list-item">@viszyyyy - 1 message</div>
+        <div class="dots-more">•••</div>
+      </div>
+
+      <div class="dashed-box">
+        <div class="sidebar-title-lg">
+          <span class="dot dot-blue"></span>
+          <span>Calls</span>
+        </div>
+        <div class="sidebar-list-item">@zodonlikebroccoli asked for help!</div>
+        <div class="sidebar-list-item">@mmmmintycheskachip asked for help!</div>
+        <div class="dots-more">•••</div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'study_wall_posts_v1';
+    let attachFile = false;
+    let currentFilter = 'All';
+
+    const defaultPosts = [
+      {
+        id: 1,
+        username: '@viszyyyy_',
+        subject: 'General',
+        text: 'Hi! Anyone got reviewers for the next exam for G9?',
+        hasDoc: false,
+        docName: '',
+        likes: 4,
+        replies: [
+          {
+            id: 101,
+            username: '@mcdonaldswifilowk',
+            text: 'Heyyy yeah I got some. Here.',
+            hasDoc: true,
+            docName: 'G9_Exam_Reviewer.pdf',
+            nestedReplies: [
+              {
+                username: '@viszyyyy_',
+                text: 'Thank youuuu!'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 2,
+        username: '@cr3atorxd',
+        subject: 'Math',
+        text: 'Haiaiaii po! Just sharing my notes in Math, since the topic was pretty hard. This is for G9 btw! xp',
+        hasDoc: true,
+        docName: 'G9_Math_Notes.pdf',
+        likes: 9,
+        replies: []
+      },
+      {
+        id: 3,
+        username: '@zodonlikebroccoli',
+        subject: 'Science',
+        text: 'Hi po mga ate at kuya > Asking for <span class="highlight-blue">help</span> po with my research. . Can someone gib tips? Here\'s my paper rn. .',
+        hasDoc: true,
+        docName: 'Research_Draft_v1.docx',
+        likes: 6,
+        replies: []
+      }
+    ];
+
+    let posts = defaultPosts;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) posts = JSON.parse(saved);
+    } catch (e) {
+      posts = defaultPosts;
+    }
+
+    function savePosts() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      } catch (e) {}
+    }
+
+    function resetWall() {
+      if (confirm('Reset the wall back to the original sample posts?')) {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        posts = JSON.parse(JSON.stringify(defaultPosts));
+        renderFeed();
+      }
+    }
+
+    function getDocSVG(fileName) {
+      return `
+        <div class="doc-attachment" onclick="openDoc('${fileName}')" title="Click to preview ${fileName}">
+          <div class="doc-circle">
+            <svg width="28" height="32" viewBox="0 0 24 28" fill="none" stroke="#1d4e28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="8" y1="13" x2="16" y2="13"></line>
+              <line x1="8" y1="17" x2="16" y2="17"></line>
+              <line x1="8" y1="21" x2="13" y2="21"></line>
+            </svg>
+          </div>
+          <span class="doc-label">${fileName}</span>
+        </div>
+      `;
+    }
+
+    function renderFeed() {
+      const container = document.getElementById('feedContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filteredPosts = currentFilter === 'All'
+        ? posts
+        : posts.filter(p => p.subject === currentFilter);
+
+      filteredPosts.forEach(post => {
+        const repliesHTML = post.replies.length > 0
+          ? `<div class="replies-container">
+              ${post.replies.map(r => `
+                <div class="reply-item">
+                  <div class="username">${r.username}</div>
+                  <div class="post-text">${r.text}</div>
+                  ${r.hasDoc ? getDocSVG(r.docName) : ''}
+                  <div>
+                    <button type="button" class="action-link comment-reply-btn" onclick="toggleNestedForm(${post.id}, ${r.id})">↳ Reply</button>
+                  </div>
+                  <div class="nested-reply-form" id="nested-form-${post.id}-${r.id}">
+                    <input type="text" class="reply-input" id="nested-input-${post.id}-${r.id}" placeholder="Reply to ${r.username}..." onkeydown="if(event.key==='Enter') submitNestedReply(${post.id}, ${r.id})"/>
+                    <button type="button" class="btn-dashed" onclick="submitNestedReply(${post.id}, ${r.id})">Send</button>
+                  </div>
+                  ${(r.nestedReplies || []).map(nr => `
+                    <div class="nested-reply">
+                      <div class="username">↳ ${nr.username}</div>
+                      <div class="post-text">${nr.text}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              `).join('')}
+            </div>`
+          : '';
+
+        const postEl = document.createElement('article');
+        postEl.className = 'post-item';
+        postEl.innerHTML = `
+          <div class="username">${post.username}</div>
+          <div class="post-text">${post.text}</div>
+          ${post.hasDoc ? getDocSVG(post.docName) : ''}
+          ${repliesHTML}
+          <div class="post-footer">
+            <button type="button" class="action-link" onclick="likePost(${post.id})">♥ ${post.likes} Likes</button>
+            <button type="button" class="action-link" onclick="toggleReplyForm(${post.id})">💬 Comment</button>
+          </div>
+          <div class="reply-form" id="reply-form-${post.id}">
+            <input type="text" class="reply-input" id="reply-input-${post.id}" placeholder="Write a comment..." onkeydown="if(event.key==='Enter') submitReply(${post.id})"/>
+            <button type="button" class="btn-dashed" onclick="submitReply(${post.id})">Send</button>
+          </div>
+        `;
+        container.appendChild(postEl);
+      });
+
+      const resetDiv = document.createElement('div');
+      resetDiv.style.textAlign = 'center';
+      resetDiv.style.marginTop = '30px';
+      resetDiv.innerHTML = `<button type="button" class="action-link" onclick="resetWall()">↺ Reset Wall to Default</button>`;
+      container.appendChild(resetDiv);
+    }
+
+    function toggleAttachment() {
+      attachFile = !attachFile;
+      const btn = document.getElementById('attachToggleBtn');
+      if (btn) {
+        btn.textContent = attachFile ? '✓ Reviewer Note Attached' : '+ Attach Reviewer Note';
+        btn.style.backgroundColor = attachFile ? '#a9e59e' : 'transparent';
+      }
+    }
+
+    function createPost() {
+      const userEl = document.getElementById('postUsername');
+      const textEl = document.getElementById('postContent');
+      const subjEl = document.getElementById('postSubject');
+
+      const rawUser = userEl ? userEl.value.trim() : '';
+      const formattedUser = rawUser ? (rawUser.startsWith('@') ? rawUser : '@' + rawUser) : '@student_you';
+      const subject = subjEl ? subjEl.value : 'General';
+      const text = textEl ? textEl.value.trim() : '';
+
+      if (!text) {
+        if (textEl) textEl.focus();
+        return;
+      }
+
+      posts.unshift({
+        id: Date.now(),
+        username: formattedUser,
+        subject: subject,
+        text: text,
+        hasDoc: attachFile,
+        docName: attachFile ? `${subject}_Notes_${Math.floor(Math.random() * 90 + 10)}.pdf` : '',
+        likes: 0,
+        replies: []
+      });
+
+      savePosts();
+      textEl.value = '';
+      if (attachFile) toggleAttachment();
+      if (currentFilter !== 'All' && currentFilter !== subject) {
+        filterBySubject('All');
+      } else {
+        renderFeed();
+      }
+    }
+
+    function toggleReplyForm(postId) {
+      const form = document.getElementById(`reply-form-${postId}`);
+      if (form) {
+        form.classList.toggle('open');
+        if (form.classList.contains('open')) {
+          document.getElementById(`reply-input-${postId}`).focus();
+        }
+      }
+    }
+
+    function submitReply(postId) {
+      const input = document.getElementById(`reply-input-${postId}`);
+      const replyText = input ? input.value.trim() : '';
+      if (!replyText) return;
+
+      const userEl = document.getElementById('postUsername');
+      const rawUser = userEl ? userEl.value.trim() : '';
+      const formattedUser = rawUser ? (rawUser.startsWith('@') ? rawUser : '@' + rawUser) : '@student_you';
+
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        post.replies.push({
+          id: Date.now(),
+          username: formattedUser,
+          text: replyText,
+          hasDoc: false,
+          docName: '',
+          nestedReplies: []
+        });
+        savePosts();
+        renderFeed();
+      }
+    }
+
+    function toggleNestedForm(postId, replyId) {
+      const form = document.getElementById(`nested-form-${postId}-${replyId}`);
+      if (form) {
+        form.classList.toggle('open');
+        if (form.classList.contains('open')) {
+          document.getElementById(`nested-input-${postId}-${replyId}`).focus();
+        }
+      }
+    }
+
+    function submitNestedReply(postId, replyId) {
+      const input = document.getElementById(`nested-input-${postId}-${replyId}`);
+      const replyText = input ? input.value.trim() : '';
+      if (!replyText) return;
+
+      const userEl = document.getElementById('postUsername');
+      const rawUser = userEl ? userEl.value.trim() : '';
+      const formattedUser = rawUser ? (rawUser.startsWith('@') ? rawUser : '@' + rawUser) : '@student_you';
+
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        const comment = post.replies.find(r => r.id === replyId);
+        if (comment) {
+          if (!comment.nestedReplies) comment.nestedReplies = [];
+          comment.nestedReplies.push({
+            username: formattedUser,
+            text: replyText
+          });
+          savePosts();
+          renderFeed();
+        }
+      }
+    }
+
+    function likePost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        post.likes++;
+        savePosts();
+        renderFeed();
+      }
+    }
+
+    function filterBySubject(subject) {
+      currentFilter = subject;
+      const banner = document.getElementById('filterBanner');
+      const filterText = document.getElementById('filterText');
+      if (banner && filterText) {
+        if (subject === 'All') {
+          banner.style.display = 'none';
+        } else {
+          banner.style.display = 'flex';
+          filterText.textContent = `Showing posts for: G9 ${subject}`;
+        }
+      }
+      renderFeed();
+    }
+
+    function openDoc(fileName) {
+      alert(`Opening reviewer document: ${fileName}`);
+    }
+
+    renderFeed();
+  </script>
+</body>
+</html>

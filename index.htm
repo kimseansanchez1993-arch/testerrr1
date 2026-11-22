@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Prompt</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Georgia, "Times New Roman", serif;
+      /* Soft pastel green background with white polka dots */
+      background-color: #d8f8b7;
+      background-image: radial-gradient(#ffffff 18%, transparent 19%),
+                        radial-gradient(#ffffff 18%, transparent 19%);
+      background-size: 90px 90px;
+      background-position: 0 0, 45px 45px;
+    }
+
+    .card {
+      position: relative;
+      width: 90%;
+      max-width: 440px;
+      background-color: #e6fbd0;
+      border: 2.5px dashed #2e7d32;
+      border-radius: 28px;
+      padding: 45px 35px 50px;
+      box-shadow: 0 8px 20px rgba(46, 125, 50, 0.08);
+    }
+
+    .prompt-title {
+      color: #0d5c16;
+      font-size: 1.75rem;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 28px;
+      max-width: 65%; /* Leaves room on the top-right for the hanging cat doodle */
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 18px 24px;
+      background-color: #b7eb9e;
+      color: #0d5c16;
+      font-family: inherit;
+      font-size: 1.45rem;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(85, 139, 47, 0.22);
+      transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn:hover {
+      background-color: #a8e38c;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(85, 139, 47, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Positioning helpers for your custom stickers/doodles */
+    .sticker {
+      position: absolute;
+      pointer-events: none; /* Allows clicks to pass through to the card/buttons */
+      user-select: none;
+    }
+
+    .sticker-bow {
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 75px;
+    }
+
+    .sticker-hanging-cat {
+      top: -8px;
+      right: 22px;
+      width: 105px;
+    }
+
+    .sticker-top-butterfly {
+      top: -38px;
+      right: -42px;
+      width: 95px;
+    }
+
+    .sticker-bottom-butterfly {
+      bottom: -35px;
+      left: -45px;
+      width: 100px;
+    }
+
+    .sticker-bottom-cat {
+      bottom: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 85px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+   
+    <h1 class="prompt-title">Do you have an account?</h1>
+
+    <div class="button-group">
+      <a href="login.htm" class="btn">Yes (Log-in)</a>
+      <a href="signup.htm" class="btn">No (Sign-up)</a>
+    </div>
+  </div>
+
+</body>
+</html>
